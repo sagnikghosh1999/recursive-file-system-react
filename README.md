@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Recursive File System Component
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This project features a recursive file system component built using React and Next.js, styled with Tailwind CSS, and animated with Framer Motion. The component is designed to display a hierarchical file and folder structure, allowing users to expand and collapse folders.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- **Recursive Rendering:** Handles hierarchical data to render folders and documents.
+- **Collapsible Folders:** Click-to-expand/collapse functionality for folders.
+- **Styled with Tailwind CSS:** Modern and responsive styling.
+- **Animated with Framer Motion:** Smooth transitions for expanding and collapsing folders.
+
+## Installation
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/sagnikghosh1999/recursive-file-system-react
+   ```
+
+2. **Navigate to the Project Directory**
+
+   ```bash
+   cd recursive-file-system-react
+   ```
+
+3. **Install Dependencies**
+
+   Make sure you have `npm` or `yarn` installed. Then, run:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+4. **Run the Development Server**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+   The application will be available at `http://localhost:3000`.
+
+## Usage
+
+### Component Overview
+
+The `FilesystemItem` component is a recursive component used to render items in a file system. It accepts a `node` prop of type `Node`, which represents the file or folder structure.
+
+#### `FilesystemItem` Component
+
+```tsx
+import { ChevronRightIcon } from '@heroicons/react/16/solid';
+import { DocumentIcon, FolderIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
+
+type Node = {
+  name: string;
+  nodes?: Node[];
+};
+
+export function FilesystemItem({ node }: { node: Node }) {
+  let [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <li key={node.name}>
+      <span className="flex items-center gap-1.5 py-1">
+        {node.nodes && node.nodes.length > 0 && (
+          <button onClick={() => setIsOpen(!isOpen)} className="p-1 -m-1">
+            <ChevronRightIcon
+              className={`size-4 text-gray-500 ${isOpen ? 'rotate-90' : ''}`}
+            />
+          </button>
+        )}
+
+        {node.nodes ? (
+          <FolderIcon
+            className={`size-6 text-sky-500 ${
+              node.nodes.length === 0 ? 'ml-[22px]' : ''
+            }`}
+          />
+        ) : (
+          <DocumentIcon className="ml-[22px] size-6 text-gray-900" />
+        )}
+        {node.name}
+      </span>
+
+      {isOpen && (
+        <ul className="pl-6">
+          {node.nodes?.map((node) => (
+            <FilesystemItem node={node} key={node.name} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Props
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **`node`**: An object of type `Node` which contains:
+  - **`name`**: The name of the file or folder.
+  - **`nodes`** (optional): An array of child nodes representing the contents of the folder.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Styling
 
-## Learn More
+The component uses Tailwind CSS for styling. Ensure Tailwind CSS is properly configured in your Next.js project.
 
-To learn more about Next.js, take a look at the following resources:
+## Animations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Framer Motion is used for animating the expansion and collapse of folders. Ensure Framer Motion is included in your project dependencies.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Acknowledgements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **React**: A JavaScript library for building user interfaces.
+- **Next.js**: A React framework for server-side rendering.
+- **Tailwind CSS**: A utility-first CSS framework.
+- **Framer Motion**: A library for animations in React.
+
+---
+
+Feel free to adjust the content to better fit your project specifics or personal preferences!
